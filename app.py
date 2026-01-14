@@ -11,13 +11,15 @@ import uuid
 
 from voice_importer import VoiceImporter
 from voice_detector import VoiceDetector
+from config import config as app_config
 
 app = Flask(__name__, static_folder='.')
 CORS(app)
-app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'
-app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50MB max file size
-app.config['ALLOWED_EXTENSIONS'] = {'mp3', 'wav', 'm4a', 'ogg', 'flac'}
+
+# Load configuration (defaults to development, override with FLASK_ENV in production)
+env = os.environ.get('FLASK_ENV', 'development')
+cfg_class = app_config.get(env, app_config['default'])
+app.config.from_object(cfg_class)
 
 # Ensure upload directory exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -365,4 +367,6 @@ def serve_static(filename):
     return send_from_directory('.', filename)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_DEBUG', '0') == '1'
+    app.run(host='0.0.0.0', debug=debug, port=port)
