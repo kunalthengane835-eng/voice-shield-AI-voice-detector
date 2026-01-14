@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceShield - AI Voice Fraud Protection</title>
+    <meta name="description" content="Protect against AI voice scams with advanced detection technology.">
+    <style>
+        :root {
+            /* Changed: Black text */
+            --foreground: #000000;
+            /* Changed: Light blue backgrounds */
+            --background: #f0f8ff;
+            --card: #e6f3ff;
+            --muted-foreground: #333333;
+            --primary: #1e40af;
+            --primary-foreground: #ffffff;
+            --accent: #d1eaff;
+            --accent-foreground: #1e3a8a;
+            --border: #b3d9ff;
+            --safe: #059669;
+            /* Changed: Light blue gradients */
+            --gradient-primary: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            --gradient-hero: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+        }
+        [data-theme="dark"] {
+            --foreground: #f9fafb;
+            --background: #0f0f0f;
+            --muted-foreground: #9ca3af;
+            --primary: #8b5cf6;
+            --primary-foreground: #ffffff;
+            --accent: #1f2937;
+            --accent-foreground: #f9fafb;
+            --card: #1f2937;
+            --border: #374151;
+            --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            --gradient-hero: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--foreground); 
+            background: var(--background);
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+        .min-h-screen { min-height: 100vh; }
+        .gradient-hero { background: var(--gradient-hero); }
+        header { padding: 1.5rem 0; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .gap-3 { gap: 0.75rem; }
+        .w-10 { width: 2.5rem; }
+        .h-10 { height: 2.5rem; }
+        .rounded-xl { border-radius: 1rem; }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .font-bold { font-weight: 700; }
+        .text-xl { font-size: 1.25rem; }
+        section { padding: 4rem 0; }
+        .py-24 { padding-top: 6rem; padding-bottom: 6rem; }
+        .max-w-3xl { max-width: 48rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .text-center { text-align: center; }
+        .inline-flex { display: inline-flex; }
+        .gap-2 { gap: 0.5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .rounded-full { border-radius: 9999px; }
+        .bg-accent { background: var(--accent); }
+        .text-sm { font-size: 0.875rem; }
+        .font-medium { font-weight: 500; }
+        .text-accent-foreground { color: var(--accent-foreground); }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .text-4xl { font-size: 2.25rem; }
+        .md\:text-5xl { font-size: 3rem; }
+        .lg\:text-6xl { font-size: 3.75rem; }
+        .leading-tight { line-height: 1.2; }
+        .text-primary { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .text-lg { font-size: 1.125rem; }
+        .md\:text-xl { font-size: 1.25rem; }
+        .text-muted-foreground { color: var(--muted-foreground); }
+        .mb-8 { margin-bottom: 2rem; }
+        .max-w-2xl { max-width: 32rem; }
+        .flex-col { flex-direction: column; }
+        .sm\:flex-row { flex-direction: row; }
+        .gap-4 { gap: 1rem; }
+        .justify-center { justify-content: center; }
+        button { 
+            border: none; cursor: pointer; font-family: inherit; 
+            display: inline-flex; align-items: center; justify-content: center; 
+            font-weight: 500; border-radius: 0.375rem; transition: all 0.2s;
+            height: 3rem; padding-left: 2rem; padding-right: 2rem; font-size: 1rem;
+        }
+        .bg-primary { background: var(--gradient-primary); color: var(--primary-foreground); }
+        .hover\:opacity-90:hover { opacity: 0.9; }
+        .border { border-width: 1px; border-style: solid; }
+        .border-input { border-color: var(--border); }
+        .bg-background { background: var(--background); }
+        .hover\:bg-accent:hover { background: var(--accent); }
+        .hover\:text-accent-foreground:hover { color: var(--accent-foreground); }
+        .grid { display: grid; }
+        .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .gap-8 { gap: 2rem; }
+        .gap-12 { gap: 3rem; }
+        .max-w-5xl { max-width: 64rem; }
+        .bg-card { background: var(--card); }
+        .p-6 { padding: 1.5rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .shadow-elegant { box-shadow: 0 10px 15px -3px rgba(121, 10, 10, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .hover\:shadow-lg:hover { box-shadow: 0 20px 25px -5px rgba(74, 6, 6, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .transition-shadow { transition: box-shadow 0.2s; }
+        .w-12 { width: 3rem; }
+        .h-12 { height: 3rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .w-6 { width: 1.5rem; }
+        .h-6 { height: 1.5rem; }
+        .text-lg { font-size: 1.125rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .footer { border-top: 1px solid var(--border); padding: 2rem 0; }
+        .w-4 { width: 1rem; }
+        .h-4 { height: 1rem; }
+        .w-5 { width: 1.25rem; }
+        .h-5 { height: 1.25rem; }
+        .ml-2 { margin-left: 0.5rem; }
+        @media (max-width: 768px) {
+            .md\:grid-cols-3 { grid-template-columns: 1fr; }
+            .sm\:flex-row { flex-direction: column; }
+            .md\:text-5xl { font-size: 2.5rem; }
+            .lg\:text-6xl { font-size: 2.75rem; }
+        }
+        /* SVG Icons styles */
+        .lucide { display: block; }
+        /* Hide unwanted elements */
+        [data-sonner-toaster], #lovable-badge, #give-freely-root-ejkiikneibegknkgimmihdpcbcedgmpo { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen gradient-hero">
+        <header class="container mx-auto px-4 py-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-md">
+                    <!-- Shield SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff7a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield w-5 h-5">
+                        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                    </svg>
+                </div>
+                <span class="font-bold text-xl">VoiceShield</span>
+            </div>
+        </header>
+
+        <section class="container mx-auto px-4 py-16 md:py-24">
+            <div class="max-w-3xl mx-auto text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent text-sm font-medium text-accent-foreground mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff7a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield w-4 h-4">
+                        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                    </svg>
+                    AI-Powered Voice Fraud Detection
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    Protect Yourself from <span class="text-primary">Voice Scams</span>
+                </h1>
+                <p class="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                    Upload phone call recordings to detect AI-generated voices and identify common scam patterns. Stay one step ahead of fraudsters.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                     <a href="loginpage.html">
+                    <button class="bg-primary hover:opacity-90 transition-opacity">
+                        Get Started Free
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-5 h-5 ml-2">
+                            <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    </a>
+                </div>
+        </section>
+
+        <!-- Feature cards section - Changed to gray small blocks -->
+        <section class="container mx-auto px-4 py-16">
+            <div class="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+                <div class="bg-card p-6 rounded-2xl shadow-elegant hover:shadow-lg transition-shadow">
+                    <div class="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center mb-4">
+                        <!-- Brain SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff7a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain w-6 h-6">
+                            <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path>
+                            <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path>
+                            <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">AI Voice Detection</h3>
+                    <p class="text-muted-foreground">Identify AI-generated or cloned voices with advanced detection technology.</p>
+                </div>
+                <div class="bg-card p-6 rounded-2xl shadow-elegant hover:shadow-lg transition-shadow">
+                    <div class="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center mb-4">
+                        <!-- Mic SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff7a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic w-6 h-6">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Scam Pattern Analysis</h3>
+                    <p class="text-muted-foreground">Detect common fraud tactics like urgency pressure and information requests.</p>
+                </div>
+                <div class="bg-card p-6 rounded-2xl shadow-elegant hover:shadow-lg transition-shadow">
+                    <div class="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center mb-4">
+                        <!-- History SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff7a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-history w-6 h-6">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Analysis History</h3>
+                    <p class="text-muted-foreground">Keep track of all your analyzed recordings in one secure place.</p>
+                </div>
+            </div>
+        </section>
+    <br>
+
+        <section class="container mx-auto px-4 py-16" style="background: var(--accent);">
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-card p-8 rounded-2xl shadow-elegant">
+                    <h2 class="text-2xl font-bold mb-6 text-center">Why Use VoiceShield?</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background: rgba(5, 150, 105, 0.2);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-big w-4 h-4">
+                                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path>
+                                </svg>
+                            </div>
+                            <span>Protect yourself from voice phishing scams.</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background: rgba(5, 150, 105, 0.2);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-big w-4 h-4">
+                                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path>
+                                </svg>
+                            </div>
+                            <span>Identify deepfake and AI-cloned voices.</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background: rgba(5, 150, 105, 0.2);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-big w-4 h-4">
+                                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path>
+                                </svg>
+                            </div>
+                            <span>Understand manipulation tactics used by fraudsters.</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background: rgba(5, 150, 105, 0.2);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-big w-4 h-4">
+                                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path>
+                                </svg>
+                            </div>
+                            <span>Secure and private analysis of your recordings.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="container mx-auto px-4 footer">
+            <div class="flex items-center justify-center gap-3 text-sm text-muted-foreground">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff7a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield w-4 h-4">
+                    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                </svg>
+                <span>VoiceShield — Protecting you from voice fraud</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

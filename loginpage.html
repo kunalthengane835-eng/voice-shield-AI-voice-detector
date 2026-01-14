@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sign In – VoiceShield</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      :root {
+        --foreground: #0f0f0f;
+        --background: #ffffff;
+        --muted-foreground: #6b7280;
+        --primary: #4f46e5;
+        --primary-foreground: #ffffff;
+        --card: #ffffff;
+        --border: #e5e7eb;
+        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: var(--gradient-primary);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .login-card {
+        background: var(--card);
+        padding: 2.5rem;
+        border-radius: 1rem;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        text-align: center;
+        color: var(--muted-foreground);
+        margin-bottom: 2rem;
+      }
+
+      label {
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem;
+        margin-top: 0.25rem;
+        margin-bottom: 1.25rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border);
+        font-size: 1rem;
+      }
+
+      button {
+        width: 100%;
+        height: 3rem;
+        border: none;
+        border-radius: 0.5rem;
+        background: var(--gradient-primary);
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
+      .footer-text {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+      }
+
+      .footer-text a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-card">
+      <h1>Sign In</h1>
+      <p>Welcome back to VoiceShield</p>
+
+      <form id="loginForm">
+        <label for="loginEmail">Email</label>
+        <input
+          id="loginEmail"
+          type="email"
+          placeholder="you@example.com"
+          required
+        />
+
+        <label for="loginPassword">Password</label>
+        <input
+          id="loginPassword"
+          type="password"
+          placeholder="••••••••"
+          required
+        />
+
+        <button type="submit">Sign In</button>
+      </form>
+
+      <div class="footer-text">
+        Don’t have an account?
+        <a href="signup.html">Create one</a>
+      </div>
+    </div>
+    <!-- Removed duplicate raw login form (inputs are in the styled card above) -->
+
+    <script src="api.js"></script>
+    <style>
+      .error-message {
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: -1rem;
+        margin-bottom: 1rem;
+        display: none;
+      }
+      .error-message.show {
+        display: block;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("loginForm");
+        const errorMessage = document.createElement("div");
+        errorMessage.className = "error-message";
+        errorMessage.id = "errorMessage";
+        form.insertBefore(errorMessage, form.querySelector("button"));
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const email = document.getElementById("loginEmail").value;
+          const password = document.getElementById("loginPassword").value;
+          const submitButton = form.querySelector("button");
+          const errorMsg = document.getElementById("errorMessage");
+
+          // Reset error message
+          errorMsg.classList.remove("show");
+          errorMsg.textContent = "";
+          submitButton.disabled = true;
+          submitButton.textContent = "Signing in...";
+
+          try {
+            await authAPI.login(email, password);
+            window.location.href = "dashboard.html";
+          } catch (error) {
+            errorMsg.textContent =
+              error.message || "Login failed. Please check your credentials.";
+            errorMsg.classList.add("show");
+            submitButton.disabled = false;
+            submitButton.textContent = "Sign In";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

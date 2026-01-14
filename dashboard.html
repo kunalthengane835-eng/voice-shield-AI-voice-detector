@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>VoiceShield | Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      body {
+        background: #f5f7fb;
+        color: #1e293b;
+      }
+
+      .navbar {
+        background: #ffffff;
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 600;
+        color: #1d4ed8;
+      }
+
+      .logo-icon {
+        background: #1d4ed8;
+        color: white;
+        padding: 6px;
+        border-radius: 8px;
+        margin-right: 10px;
+      }
+
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 14px;
+      }
+
+      .logout {
+        color: #1d4ed8;
+        text-decoration: none;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .logout:hover {
+        text-decoration: underline;
+      }
+
+      .main {
+        padding: 40px;
+        text-align: center;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 40px;
+        justify-content: center;
+      }
+
+      .tab {
+        padding: 10px 18px;
+        border-radius: 10px;
+        border: none;
+        background: #eef2ff;
+        color: #1d4ed8;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .tab.active {
+        background: #1d4ed8;
+        color: white;
+      }
+
+      h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: #64748b;
+        margin-bottom: 40px;
+      }
+
+      .upload-card {
+        display: flex;
+        justify-content: center;
+      }
+
+      .upload-box {
+        background: white;
+        width: 100%;
+        max-width: 650px;
+        padding: 50px;
+        border-radius: 16px;
+        border: 2px dashed #c7d2fe;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .upload-box:hover {
+        border-color: #1d4ed8;
+        background: #f8faff;
+      }
+
+      .upload-box.dragover {
+        border-color: #1d4ed8;
+        background: #eef2ff;
+      }
+
+      .upload-icon {
+        font-size: 40px;
+        background: #eef2ff;
+        color: #1d4ed8;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+      }
+
+      .upload-box h3 {
+        font-size: 18px;
+        margin-bottom: 5px;
+      }
+
+      .browse {
+        color: #1d4ed8;
+        font-weight: 500;
+        margin-bottom: 15px;
+      }
+
+      .support {
+        font-size: 13px;
+        color: #64748b;
+      }
+
+      #fileInput {
+        display: none;
+      }
+
+      .loading {
+        display: none;
+        margin-top: 20px;
+        color: #1d4ed8;
+      }
+
+      .loading.show {
+        display: block;
+      }
+
+      .result-card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin: 20px auto;
+        max-width: 650px;
+        text-align: left;
+        display: none;
+      }
+
+      .result-card.show {
+        display: block;
+      }
+
+      .result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .result-title {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .ai-detected {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+
+      .human-voice {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+
+      .confidence-score {
+        margin: 15px 0;
+        font-size: 16px;
+      }
+
+      .confidence-bar {
+        width: 100%;
+        height: 20px;
+        background: #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+
+      .confidence-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #10b981 0%, #ef4444 100%);
+        transition: width 0.3s;
+      }
+
+      .scam-patterns {
+        margin-top: 20px;
+      }
+
+      .scam-patterns h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+
+      .pattern-item {
+        background: #f3f4f6;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 8px 0;
+      }
+
+      .history-container {
+        display: none;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .history-container.show {
+        display: block;
+      }
+
+      .history-item {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .history-info {
+        flex: 1;
+      }
+
+      .history-filename {
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .history-date {
+        color: #64748b;
+        font-size: 14px;
+      }
+
+      .history-badge {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .error-message {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 12px;
+        border-radius: 8px;
+        margin: 20px auto;
+        max-width: 650px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="navbar">
+      <div class="logo">
+        <div class="logo-icon">🛡</div>
+        <span>VoiceShield</span>
+      </div>
+      <div class="nav-right">
+        <span class="email"></span>
+        <a href="#" class="logout">Logout</a>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="tabs">
+        <button class="tab active" data-tab="analyze">Analyze Audio</button>
+        <button class="tab" data-tab="history">History</button>
+      </div>
+
+      <!-- Analyze Tab -->
+      <div id="analyzeTab">
+        <h1>Analyze Voice Recording</h1>
+        <p class="subtitle">
+          Upload a phone call recording to detect potential scams and
+          AI-generated voices
+        </p>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="upload-card">
+          <div class="upload-box" id="uploadBox">
+            <div class="upload-icon">⬆</div>
+            <h3>Drop your audio file here</h3>
+            <p class="browse">or click to browse</p>
+            <p class="support">Supports MP3, WAV, M4A, OGG, FLAC • Max 50MB</p>
+            <input type="file" id="fileInput" accept="audio/*" />
+          </div>
+        </div>
+
+        <div class="loading" id="loading">
+          <p>Uploading and analyzing... Please wait.</p>
+        </div>
+
+        <div class="result-card" id="resultCard">
+          <div class="result-header">
+            <div class="result-title">Analysis Result</div>
+            <div id="resultBadge"></div>
+          </div>
+          <div class="confidence-score">
+            <div>Confidence Score: <strong id="confidenceValue"></strong></div>
+            <div class="confidence-bar">
+              <div class="confidence-fill" id="confidenceBar"></div>
+            </div>
+          </div>
+          <div class="scam-patterns" id="scamPatterns"></div>
+        </div>
+      </div>
+
+      <!-- History Tab -->
+      <div id="historyTab" class="history-container">
+        <h1>Analysis History</h1>
+        <p class="subtitle">View your previous voice analyses</p>
+        <div id="historyList"></div>
+      </div>
+    </main>
+
+    <script src="api.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Check authentication
+        if (!isAuthenticated()) {
+          window.location.href = "loginpage.html";
+          return;
+        }
+
+        // Show user email
+        const email = getUserEmail();
+        const emailSpan = document.querySelector(".email");
+        if (emailSpan) emailSpan.textContent = email;
+
+        // Logout handler
+        const logout = document.querySelector(".logout");
+        if (logout) {
+          logout.addEventListener("click", (e) => {
+            e.preventDefault();
+            authAPI.logout();
+            window.location.href = "loginpage.html";
+          });
+        }
+
+        // Tab switching
+        const tabs = document.querySelectorAll(".tab");
+        const analyzeTab = document.getElementById("analyzeTab");
+        const historyTab = document.getElementById("historyTab");
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            tabs.forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            const tabName = tab.getAttribute("data-tab");
+            if (tabName === "analyze") {
+              analyzeTab.style.display = "block";
+              historyTab.classList.remove("show");
+            } else {
+              analyzeTab.style.display = "none";
+              historyTab.classList.add("show");
+              loadHistory();
+            }
+          });
+        });
+
+        // File upload
+        const uploadBox = document.getElementById("uploadBox");
+        const fileInput = document.getElementById("fileInput");
+        const loading = document.getElementById("loading");
+        const resultCard = document.getElementById("resultCard");
+        const errorMessage = document.getElementById("errorMessage");
+
+        uploadBox.addEventListener("click", () => fileInput.click());
+
+        uploadBox.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          uploadBox.classList.add("dragover");
+        });
+
+        uploadBox.addEventListener("dragleave", () => {
+          uploadBox.classList.remove("dragover");
+        });
+
+        uploadBox.addEventListener("drop", (e) => {
+          e.preventDefault();
+          uploadBox.classList.remove("dragover");
+          const file = e.dataTransfer.files[0];
+          if (file) handleFileUpload(file);
+        });
+
+        fileInput.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (file) handleFileUpload(file);
+        });
+
+        async function handleFileUpload(file) {
+          // Validate file type
+          const allowedTypes = [
+            "audio/mpeg",
+            "audio/wav",
+            "audio/mp4",
+            "audio/ogg",
+            "audio/flac",
+            "audio/x-m4a",
+          ];
+          if (
+            !allowedTypes.some((type) => file.type.includes(type.split("/")[1]))
+          ) {
+            showError(
+              "Please upload a valid audio file (MP3, WAV, M4A, OGG, FLAC)"
+            );
+            return;
+          }
+
+          // Validate file size (50MB)
+          if (file.size > 50 * 1024 * 1024) {
+            showError("File size must be less than 50MB");
+            return;
+          }
+
+          errorMessage.classList.remove("show");
+          resultCard.classList.remove("show");
+          loading.classList.add("show");
+
+          try {
+            // Upload file
+            const uploadResult = await voiceAPI.uploadFile(file);
+
+            // Analyze file
+            const analysisResult = await voiceAPI.analyzeFile(
+              uploadResult.file_id
+            );
+
+            // Display results
+            displayResults(analysisResult.analysis);
+            loading.classList.remove("show");
+          } catch (error) {
+            loading.classList.remove("show");
+            showError(error.message || "Failed to upload and analyze file");
+          }
+        }
+
+        function displayResults(analysis) {
+          const isAI = analysis.is_ai_generated;
+          const confidence = analysis.confidence;
+          const patterns = analysis.scam_patterns || [];
+
+          // Update badge
+          const badge = document.getElementById("resultBadge");
+          badge.className = isAI ? "ai-detected" : "human-voice";
+          badge.textContent = isAI ? "⚠️ AI Voice Detected" : "✓ Human Voice";
+
+          // Update confidence
+          document.getElementById("confidenceValue").textContent = `${(
+            confidence * 100
+          ).toFixed(1)}%`;
+          document.getElementById("confidenceBar").style.width = `${
+            confidence * 100
+          }%`;
+
+          // Update scam patterns
+          const patternsDiv = document.getElementById("scamPatterns");
+          if (patterns.length > 0) {
+            patternsDiv.innerHTML = "<h3>Detected Patterns:</h3>";
+            patterns.forEach((pattern) => {
+              const patternItem = document.createElement("div");
+              patternItem.className = "pattern-item";
+              patternItem.innerHTML = `<strong>${pattern.type}</strong>: ${pattern.description}`;
+              patternsDiv.appendChild(patternItem);
+            });
+          } else {
+            patternsDiv.innerHTML = "";
+          }
+
+          resultCard.classList.add("show");
+        }
+
+        async function loadHistory() {
+          const historyList = document.getElementById("historyList");
+          historyList.innerHTML = "<p>Loading history...</p>";
+
+          try {
+            const data = await voiceAPI.getHistory();
+            const history = data.history || [];
+
+            if (history.length === 0) {
+              historyList.innerHTML = "<p>No analysis history found.</p>";
+              return;
+            }
+
+            historyList.innerHTML = "";
+            history.forEach((item) => {
+              const historyItem = document.createElement("div");
+              historyItem.className = "history-item";
+
+              const date = new Date(item.analyzed_at);
+              const isAI = item.is_ai_generated;
+
+              historyItem.innerHTML = `
+                <div class="history-info">
+                  <div class="history-filename">${item.filename}</div>
+                  <div class="history-date">${date.toLocaleString()}</div>
+                </div>
+                <div class="history-badge ${
+                  isAI ? "ai-detected" : "human-voice"
+                }">
+                  ${isAI ? "AI Detected" : "Human"} (${(
+                item.confidence_score * 100
+              ).toFixed(0)}%)
+                </div>
+              `;
+
+              historyList.appendChild(historyItem);
+            });
+          } catch (error) {
+            historyList.innerHTML = `<p class="error-message show">Error loading history: ${error.message}</p>`;
+          }
+        }
+
+        function showError(message) {
+          errorMessage.textContent = message;
+          errorMessage.classList.add("show");
+        }
+      });
+    </script>
+  </body>
+</html>
